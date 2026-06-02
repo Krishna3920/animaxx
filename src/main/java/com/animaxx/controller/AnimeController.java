@@ -10,6 +10,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/anime")
 public class AnimeController {
+    @PutMapping("/update/{id}")
+    public Anime updateAnime(@PathVariable Integer id,
+            @RequestBody Anime anime) {
+        return animeService.updateAnime(id, anime);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteAnime(@PathVariable Integer id) {
+        animeService.deleteAnime(id);
+        return "Anime deleted successfully!";
+    }
+
+    @GetMapping("/search")
+    public List<Anime> searchAnime(@RequestParam String title) {
+        return animeService.searchAnime(title);
+    }
 
     @Autowired
     private AnimeService animeService;

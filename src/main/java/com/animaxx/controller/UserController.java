@@ -9,6 +9,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+    @PostMapping("/login")
+    public String loginUser(@RequestBody User user) {
+        return userService.loginUser(
+                user.getEmail(),
+                user.getPassword());
+    }
+
     @GetMapping("/all")
     public List<User> getAllUsers() {
         return userService.getAllUsers();

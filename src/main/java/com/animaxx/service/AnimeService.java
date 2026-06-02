@@ -9,6 +9,29 @@ import java.util.List;
 
 @Service
 public class AnimeService {
+    public Anime updateAnime(Integer id, Anime updatedAnime) {
+
+        Anime anime = animeRepository.findById(id).orElse(null);
+
+        if (anime != null) {
+            anime.setTitle(updatedAnime.getTitle());
+            anime.setGenre(updatedAnime.getGenre());
+            anime.setRating(updatedAnime.getRating());
+            anime.setReleaseYear(updatedAnime.getReleaseYear());
+
+            return animeRepository.save(anime);
+        }
+
+        return null;
+    }
+
+    public void deleteAnime(Integer id) {
+        animeRepository.deleteById(id);
+    }
+
+    public List<Anime> searchAnime(String title) {
+        return animeRepository.findByTitleContainingIgnoreCase(title);
+    }
 
     @Autowired
     private AnimeRepository animeRepository;
@@ -20,4 +43,5 @@ public class AnimeService {
     public List<Anime> getAllAnime() {
         return animeRepository.findAll();
     }
+
 }
