@@ -14,6 +14,7 @@ public class Anime {
     private String genre;
     private Double rating;
     private Integer releaseYear;
+    private String imageUrl;
 
     public Anime() {
     }
@@ -56,5 +57,13 @@ public class Anime {
 
     public void setReleaseYear(Integer releaseYear) {
         this.releaseYear = releaseYear;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

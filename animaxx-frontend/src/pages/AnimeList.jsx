@@ -1,107 +1,105 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function AnimeList() {
-
-    const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [animeList, setAnimeList] = useState([]);
 
   useEffect(() => {
-
     axios
       .get("http://localhost:8080/api/anime/all")
       .then((response) => {
-       console.log(JSON.stringify(response.data[0], null, 2));
+        console.log(response.data);
         setAnimeList(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-
   }, []);
+
   const addToWatchlist = async (animeId) => {
+    try {
+      await axios.post(
+        "http://localhost:8080/api/watchlist/add",
+        {
+          userId: 2,
+          animeId: animeId,
+        }
+      );
 
-  try {
+      alert("Added to Watchlist!");
+    } catch (error) {
+      console.log(error);
+      alert("Failed to add!");
+    }
+  };
 
-    await axios.post(
-      "http://localhost:8080/api/watchlist/add",
-      {
-        userId: 2,
-        animeId: animeId
-      }
-    );
+  return (
+    <div className="anime-container">
+      <nav className="navbar">
+        <h2>AniMaxx</h2>
 
-    alert("Added to Watchlist!");
+        <div>
+          <Link to="/">
+            <button>Home</button>
+          </Link>
 
-  } catch (error) {
+          <Link to="/watchlist">
+            <button>Watchlist</button>
+          </Link>
+        </div>
+      </nav>
 
-    console.log(error);
-    alert("Failed to add!");
+      <h1>AniMaxx Anime List</h1>
 
-  }
-};
+      <p>Total Anime: {animeList.length}</p>
 
- return (
-  <div className="anime-container">
-    <nav className="navbar">
-  <h2>AniMaxx</h2>
+      <input
+        type="text"
+        placeholder="Search Anime..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="search-box"
+      />
 
-  <div>
-    <button>Home</button>
-    <button>Anime</button>
-    <button>Watchlist</button>
-    <button>Profile</button>
-  </div>
-</nav>
+      <div className="anime-grid">
+        {animeList
+          .filter((anime) =>
+            anime.title
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())
+          )
+          .map((anime) => (
+            <div
+              className="anime-card"
+              key={anime.animeId}
+            >
+              <img
+               src={anime.imageUrl}
+                alt={anime.title}
+                className="anime-image"
+              />
 
-    <h1>AniMaxx Anime List</h1>
-    <p>
-  Total Anime: {animeList.length}
-</p>
+              <h2>{anime.title}</h2>
 
-    <input
-      type="text"
-      placeholder="Search Anime..."
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      className="search-box"
-    />
+              <p>{anime.genre}</p>
 
-    <div className="anime-grid">
+              <p>⭐ {anime.rating}</p>
 
-      {animeList
-        .filter((anime) =>
-          anime.title
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase())
-        )
-        .map((anime) => (
-
-          <div
-            className="anime-card"
-            key={anime.animeId}
-          >
-
-            <h2>{anime.title}</h2>
-
-            <p>{anime.genre}</p>
-
-            <p>⭐ {anime.rating}</p>
-             <button className="watchlist-btn"
-              className="watchlist-btn"
-  onClick={() => addToWatchlist(anime.animeId)}>
-    + Add to Watchlist
-  </button>
-
-
-          </div>
-
-        ))}
-
+              <button
+                className="watchlist-btn"
+                onClick={() =>
+                  addToWatchlist(anime.animeId)
+                }
+              >
+                + Add to Watchlist
+              </button>
+            </div>
+          ))}
+      </div>
     </div>
-
-  </div>
-);
+  );
 }
 
 export default AnimeList;

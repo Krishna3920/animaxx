@@ -24,4 +24,11 @@ public class WatchlistController {
     public List<Watchlist> getAllWatchlist() {
         return watchlistService.getAllWatchlist();
     }
+    @DeleteMapping("/delete/{id}")
+public String deleteWatchlist(@PathVariable Integer id) {
+
+    watchlistService.deleteWatchlist(id);
+
+    return "Deleted Successfully";
+}
 }
