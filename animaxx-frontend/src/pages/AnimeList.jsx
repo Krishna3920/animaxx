@@ -1,48 +1,75 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function AnimeList() {
+
   const [searchTerm, setSearchTerm] = useState("");
   const [animeList, setAnimeList] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
+
     axios
       .get("http://localhost:8080/api/anime/all")
       .then((response) => {
+
         console.log(response.data);
+
         setAnimeList(response.data);
+
       })
       .catch((error) => {
+
         console.log(error);
+
       });
+
   }, []);
 
   const addToWatchlist = async (animeId) => {
+
     try {
+
+      const email = localStorage.getItem("email");
+
+      const userResponse = await axios.get(
+        `http://localhost:8080/api/users/email/${email}`
+      );
+
+      const userId = userResponse.data.userId;
+
       await axios.post(
         "http://localhost:8080/api/watchlist/add",
         {
-          userId: 2,
-          animeId: animeId,
+          userId: userId,
+          animeId: animeId
         }
       );
 
       alert("Added to Watchlist!");
+
     } catch (error) {
+
       console.log(error);
+
       alert("Failed to add!");
+
     }
+
   };
 
   return (
+
     <div className="anime-container">
+
       <nav className="navbar">
+
         <h2>AniMaxx</h2>
 
         <div>
+
           <Link to="/">
             <button>Home</button>
           </Link>
@@ -50,7 +77,9 @@ function AnimeList() {
           <Link to="/watchlist">
             <button>Watchlist</button>
           </Link>
+
         </div>
+
       </nav>
 
       <h1>AniMaxx Anime List</h1>
@@ -66,6 +95,7 @@ function AnimeList() {
       />
 
       <div className="anime-grid">
+
         {animeList
           .filter((anime) =>
             anime.title
@@ -73,15 +103,17 @@ function AnimeList() {
               .includes(searchTerm.toLowerCase())
           )
           .map((anime) => (
+
             <div
-  className="anime-card"
-  key={anime.animeId}
-  onClick={() =>
-    navigate(`/anime/${anime.animeId}`)
-  }
->
+              className="anime-card"
+              key={anime.animeId}
+              onClick={() =>
+                navigate(`/anime/${anime.animeId}`)
+              }
+            >
+
               <img
-               src={anime.imageUrl}
+                src={anime.imageUrl}
                 alt={anime.title}
                 className="anime-image"
               />
@@ -94,17 +126,27 @@ function AnimeList() {
 
               <button
                 className="watchlist-btn"
-                onClick={() =>
-                  addToWatchlist(anime.animeId)
-                }
+                onClick={(e) => {
+
+                  e.stopPropagation();
+
+                  addToWatchlist(anime.animeId);
+
+                }}
               >
                 + Add to Watchlist
               </button>
+
             </div>
+
           ))}
+
       </div>
+
     </div>
+
   );
+
 }
 
 export default AnimeList;

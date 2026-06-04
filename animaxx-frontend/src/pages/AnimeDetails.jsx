@@ -11,6 +11,7 @@ function AnimeDetails() {
   const navigate = useNavigate();
 
   const [anime, setAnime] = useState(null);
+  const [animeList, setAnimeList] = useState([]);
 
 
   useEffect(() => {
@@ -24,6 +25,7 @@ function AnimeDetails() {
         );
 
         setAnime(foundAnime);
+        setAnimeList(response.data);
 
       })
       .catch((error) => {
@@ -58,6 +60,11 @@ const addToWatchlist = async () => {
   }
 
 };
+const relatedAnime = animeList.filter(
+  (a) =>
+    a.genre === anime.genre &&
+    a.animeId !== anime.animeId
+);
   return (
   <div className="anime-container">
     <button
@@ -93,6 +100,34 @@ const addToWatchlist = async () => {
 >
   + Add to Watchlist
 </button>
+<h2>You May Also Like</h2>
+
+<div className="anime-grid">
+
+  {relatedAnime.map((item) => (
+
+    <div
+      className="anime-card"
+      key={item.animeId}
+    >
+
+      <img
+        src={item.imageUrl}
+        alt={item.title}
+        className="anime-image"
+      />
+
+      <h2>{item.title}</h2>
+
+      <p>{item.genre}</p>
+
+      <p>⭐ {item.rating}</p>
+
+    </div>
+
+  ))}
+
+</div>
 
       </div>
 

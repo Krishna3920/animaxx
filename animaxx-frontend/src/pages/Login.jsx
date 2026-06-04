@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
+
 function Login() {
 
   const [email, setEmail] = useState("");
@@ -17,7 +18,16 @@ function Login() {
         }
       );
 
-      alert(response.data);
+     localStorage.setItem(
+  "token",
+  response.data
+
+);
+localStorage.setItem(
+  "email",
+  email
+);
+alert("Login Successful!");
 
     } catch (error) {
       alert("Login Failed");
