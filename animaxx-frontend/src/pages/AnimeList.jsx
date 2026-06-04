@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function AnimeList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [animeList, setAnimeList] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -72,9 +74,12 @@ function AnimeList() {
           )
           .map((anime) => (
             <div
-              className="anime-card"
-              key={anime.animeId}
-            >
+  className="anime-card"
+  key={anime.animeId}
+  onClick={() =>
+    navigate(`/anime/${anime.animeId}`)
+  }
+>
               <img
                src={anime.imageUrl}
                 alt={anime.title}

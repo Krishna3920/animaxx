@@ -152,3 +152,33 @@ body {
 .anime-card:hover .anime-image {
   transform: scale(1.05);
 }
+.details-card {
+  display: flex;
+  gap: 40px;
+  background: rgba(255,255,255,0.08);
+  padding: 30px;
+  border-radius: 20px;
+  margin-top: 40px;
+}
+
+.details-image {
+  width: 300px;
+  border-radius: 20px;
+}
+
+.details-content {
+  color: white;
+}
+
+.details-content h1 {
+  margin-bottom: 20px;
+  color: #c084fc;
+}
+.back-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
