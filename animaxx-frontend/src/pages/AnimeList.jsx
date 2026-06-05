@@ -59,7 +59,14 @@ function AnimeList() {
     }
 
   };
+const logout = () => {
 
+  localStorage.removeItem("token");
+  localStorage.removeItem("email");
+
+  navigate("/login");
+
+};
   return (
 
     <div className="anime-container">
@@ -77,6 +84,9 @@ function AnimeList() {
           <Link to="/watchlist">
             <button>Watchlist</button>
           </Link>
+          <button onClick={logout}>
+  Logout
+</button>
 
         </div>
 

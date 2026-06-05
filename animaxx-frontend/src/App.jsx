@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import AnimeList from "./pages/AnimeList";
 import Watchlist from "./pages/Watchlist";
@@ -6,14 +6,54 @@ import AnimeDetails from "./pages/AnimeDetails";
 import Login from "./pages/Login";
 
 function App() {
+
+  const token = localStorage.getItem("token");
+
   return (
     <BrowserRouter>
+
       <Routes>
-        <Route path="/" element={<AnimeList />} />
-        <Route path="/watchlist" element={<Watchlist />} />
-         <Route path="/anime/:id" element={<AnimeDetails />} />
-         <Route path="/login" element={<Login />} />
+
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        <Route
+          path="/"
+          element={
+            token ? (
+              <AnimeList />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+
+        <Route
+          path="/watchlist"
+          element={
+            token ? (
+              <Watchlist />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+
+        <Route
+          path="/anime/:id"
+          element={
+            token ? (
+              <AnimeDetails />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+
       </Routes>
+
     </BrowserRouter>
   );
 }
