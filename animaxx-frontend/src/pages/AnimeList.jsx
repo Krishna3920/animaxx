@@ -14,16 +14,10 @@ function AnimeList() {
     axios
       .get("http://localhost:8080/api/anime/all")
       .then((response) => {
-
-        console.log(response.data);
-
         setAnimeList(response.data);
-
       })
       .catch((error) => {
-
         console.log(error);
-
       });
 
   }, []);
@@ -43,8 +37,8 @@ function AnimeList() {
       await axios.post(
         "http://localhost:8080/api/watchlist/add",
         {
-          userId: userId,
-          animeId: animeId
+          userId,
+          animeId
         }
       );
 
@@ -53,107 +47,156 @@ function AnimeList() {
     } catch (error) {
 
       console.log(error);
-
       alert("Failed to add!");
 
     }
 
   };
-const logout = () => {
 
-  localStorage.removeItem("token");
-  localStorage.removeItem("email");
+  const logout = () => {
 
-  navigate("/login");
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
 
-};
+    navigate("/login");
+
+  };
+
   return (
 
-    <div className="anime-container">
+    <div className="min-h-screen bg-base-200">
 
-      <nav className="navbar">
+      <div className="navbar bg-base-100 shadow-lg px-6">
 
-        <h2>AniMaxx</h2>
+        <div className="flex-1">
+          <h1 className="text-3xl font-bold text-primary">
+            AniMaxx
+          </h1>
+        </div>
 
-        <div>
+        <div className="flex gap-2">
 
           <Link to="/">
-            <button>Home</button>
+            <button className="btn btn-primary">
+              Home
+            </button>
           </Link>
 
           <Link to="/watchlist">
-            <button>Watchlist</button>
+            <button className="btn btn-secondary">
+              Watchlist
+            </button>
           </Link>
+
           <Link to="/profile">
-  <button>Profile</button>
-</Link>
-          <button onClick={logout}>
-  Logout
-</button>
+            <button className="btn btn-accent">
+              Profile
+            </button>
+          </Link>
+
+          <button
+            className="btn btn-error"
+            onClick={logout}
+          >
+            Logout
+          </button>
 
         </div>
 
-      </nav>
+      </div>
 
-      <h1>AniMaxx Anime List</h1>
+      <div className="p-8">
 
-      <p>Total Anime: {animeList.length}</p>
+        <h1 className="text-5xl font-bold text-center mb-6">
+          AniMaxx Anime List
+        </h1>
 
-      <input
-        type="text"
-        placeholder="Search Anime..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="search-box"
-      />
+        <p className="text-center text-lg mb-6">
+          Total Anime: {animeList.length}
+        </p>
 
-      <div className="anime-grid">
+        <div className="flex justify-center mb-8">
 
-        {animeList
-          .filter((anime) =>
-            anime.title
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase())
-          )
-          .map((anime) => (
+          <input
+            type="text"
+            placeholder="Search Anime..."
+            value={searchTerm}
+            onChange={(e) =>
+              setSearchTerm(e.target.value)
+            }
+            className="input input-bordered w-full max-w-md"
+          />
 
-            <div
-              className="anime-card"
-              key={anime.animeId}
-              onClick={() =>
-                navigate(`/anime/${anime.animeId}`)
-              }
-            >
+        </div>
 
-              <img
-                src={anime.imageUrl}
-                alt={anime.title}
-                className="anime-image"
-              />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
 
-              <h2>{anime.title}</h2>
+          {animeList
+            .filter((anime) =>
+              anime.title
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase())
+            )
+            .map((anime) => (
 
-              <p>{anime.genre}</p>
-
-              <p>⭐ {anime.rating}</p>
-
-              <button
-                className="watchlist-btn"
-                onClick={(e) => {
-
-                  e.stopPropagation();
-
-                  addToWatchlist(anime.animeId);
-
-                }}
+              <div
+                key={anime.animeId}
+                className="card bg-base-100 shadow-xl cursor-pointer hover:scale-105 transition-all"
+                onClick={() =>
+                  navigate(`/anime/${anime.animeId}`)
+                }
               >
-                + Add to Watchlist
-              </button>
-              
 
-            </div>
+                <figure>
 
-          ))}
+                  <img
+                    src={anime.imageUrl}
+                    alt={anime.title}
+                    className="h-80 w-full object-cover"
+                  />
+
+                </figure>
+
+                <div className="card-body">
+
+                  <h2 className="card-title">
+                    {anime.title}
+                  </h2>
+
+                  <p>
+                    Genre: {anime.genre}
+                  </p>
+
+                  <p>
+                    ⭐ {anime.rating}
+                  </p>
+
+                  <div className="card-actions justify-end">
+
+                    <button
+                      className="btn btn-primary"
+                      onClick={(e) => {
+
+                        e.stopPropagation();
+
+                        addToWatchlist(
+                          anime.animeId
+                        );
+
+                      }}
+                    >
+                      Add to Watchlist
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            ))}
+
+        </div>
 
       </div>
 
