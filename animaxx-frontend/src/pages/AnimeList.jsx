@@ -84,6 +84,9 @@ const logout = () => {
           <Link to="/watchlist">
             <button>Watchlist</button>
           </Link>
+          <Link to="/profile">
+  <button>Profile</button>
+</Link>
           <button onClick={logout}>
   Logout
 </button>
@@ -146,6 +149,7 @@ const logout = () => {
               >
                 + Add to Watchlist
               </button>
+              
 
             </div>
 

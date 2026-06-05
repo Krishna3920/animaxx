@@ -4,12 +4,14 @@ import AnimeList from "./pages/AnimeList";
 import Watchlist from "./pages/Watchlist";
 import AnimeDetails from "./pages/AnimeDetails";
 import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 
 function App() {
 
   const token = localStorage.getItem("token");
 
   return (
+
     <BrowserRouter>
 
       <Routes>
@@ -52,9 +54,21 @@ function App() {
           }
         />
 
+        <Route
+          path="/profile"
+          element={
+            token ? (
+              <Profile />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+
       </Routes>
 
     </BrowserRouter>
+
   );
 }
 
