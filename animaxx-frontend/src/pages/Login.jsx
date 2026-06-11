@@ -1,92 +1,81 @@
 import { useState } from "react";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
 
 function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  
 
   const loginUser = async () => {
 
-  try {
-
-    const response = await axios.post(
-      "http://localhost:8080/api/users/login",
-      {
-        email,
-        password
-      }
-    );
-
-    localStorage.setItem(
-      "token",
-      response.data
-    );
-
-    localStorage.setItem(
-      "email",
-      email
-    );
-
     try {
 
-      const userResponse = await axios.get(
-        `http://localhost:8080/api/users/email/${email}`,
+      const response = await axios.post(
+        "http://localhost:8080/api/users/login",
         {
-          headers: {
-            Authorization:
-              `Bearer ${response.data}`
-          }
+          email,
+          password
         }
       );
 
-      if (userResponse.data.role) {
+      if (
+        response.data ===
+        "Invalid Email or Password"
+      ) {
+
+        alert("Invalid Email or Password");
+        return;
+
+      }
+
+      localStorage.setItem(
+        "token",
+        response.data
+      );
+
+      localStorage.setItem(
+        "email",
+        email
+      );
+
+      try {
+
+        const userResponse = await axios.get(
+          `http://localhost:8080/api/users/email/${email}`,
+          {
+            headers: {
+              Authorization:
+                `Bearer ${response.data}`
+            }
+          }
+        );
 
         localStorage.setItem(
           "role",
-          userResponse.data.role
+          userResponse.data.role || "USER"
+        );
+
+      } catch (err) {
+
+        console.log(
+          "Role fetch failed:",
+          err
         );
 
       }
 
-    } catch (err) {
+      window.location.href = "/";
 
-      console.log(
-        "Role fetch failed:",
-        err
-      );
+    } catch (error) {
 
-    }
-
-    window.location.href = "/";
-
-  } catch (error) {
-
-    console.log(error);
-
-    if (error.response) {
-
-      console.log(
-        "Status:",
-        error.response.status
-      );
-
-      console.log(
-        "Data:",
-        error.response.data
-      );
+      console.log(error);
+      alert("Login Failed!");
 
     }
 
-    alert("Login Failed!");
-
-  }
-
-};
+  };
 
   return (
 
@@ -102,7 +91,7 @@ function Login() {
               AniMaxx
             </h1>
 
-           <p className="text-xl text-gray-300 mt-4">
+            <p className="text-xl text-gray-300 mt-4">
               Watch. Track. Discover Anime.
             </p>
 
@@ -113,7 +102,7 @@ function Login() {
             <input
               type="email"
               placeholder="Enter Email"
-             className="input input-bordered input-lg w-full bg-white/10 text-lg"
+              className="input input-bordered input-lg w-full bg-white/10 text-lg"
               value={email}
               onChange={(e) =>
                 setEmail(e.target.value)
@@ -146,9 +135,11 @@ function Login() {
                 }
               >
 
-                {showPassword
-                  ? <FaEyeSlash />
-                  : <FaEye />}
+                {
+                  showPassword
+                    ? <FaEyeSlash />
+                    : <FaEye />
+                }
 
               </button>
 
@@ -169,12 +160,15 @@ function Login() {
               New to AniMaxx?
             </p>
 
-           <button
-  className="btn btn-link text-xl text-purple-400"
-  onClick={() => window.location.href = "/register"}
->
-  Register
-</button>
+            <button
+              className="btn btn-link text-xl text-purple-400"
+              onClick={() =>
+                window.location.href =
+                  "/register"
+              }
+            >
+              Register
+            </button>
 
           </div>
 

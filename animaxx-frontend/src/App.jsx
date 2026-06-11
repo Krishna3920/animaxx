@@ -49,7 +49,6 @@ function App() {
 <Route
   path="/admin"
   element={
-    token &&
     localStorage.getItem("role") === "ADMIN"
       ? <AdminPanel />
       : <Navigate to="/" />
