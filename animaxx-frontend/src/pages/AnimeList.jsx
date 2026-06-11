@@ -6,13 +6,22 @@ function AnimeList() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [animeList, setAnimeList] = useState([]);
+  const role = localStorage.getItem("role");
+  
 
   const navigate = useNavigate();
 
   useEffect(() => {
 
-    axios
-      .get("http://localhost:8080/api/anime/all")
+   axios.get(
+  "http://localhost:8080/api/anime/all",
+  {
+    headers: {
+      Authorization:
+        `Bearer ${localStorage.getItem("token")}`
+    }
+  }
+)
       .then((response) => {
         setAnimeList(response.data);
       })
@@ -21,46 +30,66 @@ function AnimeList() {
       });
 
   }, []);
+const addToWatchlist = async (animeId) => {
 
-  const addToWatchlist = async (animeId) => {
+  try {
 
-    try {
+    const email = localStorage.getItem("email");
 
-      const email = localStorage.getItem("email");
-
-      const userResponse = await axios.get(
-        `http://localhost:8080/api/users/email/${email}`
-      );
-
-      const userId = userResponse.data.userId;
-
-      await axios.post(
-        "http://localhost:8080/api/watchlist/add",
-        {
-          userId,
-          animeId
+    const userResponse = await axios.get(
+      `http://localhost:8080/api/users/email/${email}`,
+      {
+        headers: {
+          Authorization:
+            `Bearer ${localStorage.getItem("token")}`
         }
-      );
+      }
+    );
 
-      alert("Added to Watchlist!");
+    const userId = userResponse.data.userId;
 
-    } catch (error) {
+    await axios.post(
+      "http://localhost:8080/api/watchlist/add",
+      {
+        userId,
+        animeId
+      },
+      {
+        headers: {
+          Authorization:
+            `Bearer ${localStorage.getItem("token")}`
+        }
+      }
+    );
 
-      console.log(error);
-      alert("Failed to add!");
+    alert("Added to Watchlist!");
 
+  } catch (error) {
+
+    console.log(error);
+
+    if (error.response) {
+      console.log("Status:", error.response.status);
+      console.log("Data:", error.response.data);
     }
 
-  };
+    alert("Failed to add!");
 
+  }
+
+};
   const logout = () => {
 
     localStorage.removeItem("token");
     localStorage.removeItem("email");
+    localStorage.removeItem("role");
 
     navigate("/login");
 
   };
+  const topRatedAnime = [...animeList]
+  .sort((a, b) => b.rating - a.rating)
+  .slice(0, 3);
 
   return (
 
@@ -92,7 +121,15 @@ function AnimeList() {
             <button className="btn btn-accent">
               Profile
             </button>
+            
           </Link>
+          {role === "ADMIN" && (
+  <Link to="/admin">
+    <button className="btn btn-warning">
+      Admin
+    </button>
+  </Link>
+)}
 
           <button
             className="btn btn-error"
@@ -114,6 +151,46 @@ function AnimeList() {
         <p className="text-center text-lg mb-6">
           Total Anime: {animeList.length}
         </p>
+        <h2 className="text-3xl font-bold mb-6">
+  🔥 Top Rated Anime
+</h2>
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+  {topRatedAnime.map((anime) => (
+
+    <div
+      key={anime.animeId}
+      className="card bg-base-100 shadow-xl"
+    >
+
+      <figure>
+
+        <img
+          src={anime.imageUrl}
+          alt={anime.title}
+          className="h-60 w-full object-cover"
+        />
+
+      </figure>
+
+      <div className="card-body">
+
+        <h2 className="card-title">
+          {anime.title}
+        </h2>
+
+        <p>
+          ⭐ {anime.rating}
+        </p>
+
+      </div>
+
+    </div>
+
+  ))}
+
+</div>
 
         <div className="flex justify-center mb-8">
 
@@ -187,7 +264,15 @@ function AnimeList() {
                     >
                       Add to Watchlist
                     </button>
-
+<button
+  className="btn btn-warning"
+  onClick={(e) => {
+    e.stopPropagation();
+    navigate("/admin");
+  }}
+>
+  Admin
+</button>
                   </div>
 
                 </div>

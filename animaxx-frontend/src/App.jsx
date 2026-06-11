@@ -5,7 +5,8 @@ import Watchlist from "./pages/Watchlist";
 import AnimeDetails from "./pages/AnimeDetails";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
-
+import Register from "./pages/Register";
+import AdminPanel from "./pages/AdminPanel";
 function App() {
 
   const token = localStorage.getItem("token");
@@ -20,6 +21,10 @@ function App() {
           path="/login"
           element={<Login />}
         />
+        <Route
+  path="/register"
+  element={<Register />}
+/>
 
         <Route
           path="/"
@@ -31,6 +36,25 @@ function App() {
             )
           }
         />
+        <Route
+  path="/admin"
+  element={
+    token ? (
+      <AdminPanel />
+    ) : (
+      <Navigate to="/login" />
+    )
+  }
+/>
+<Route
+  path="/admin"
+  element={
+    token &&
+    localStorage.getItem("role") === "ADMIN"
+      ? <AdminPanel />
+      : <Navigate to="/" />
+  }
+/>
 
         <Route
           path="/watchlist"

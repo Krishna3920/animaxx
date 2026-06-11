@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
 
@@ -7,11 +8,13 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+
   const registerUser = async () => {
 
     try {
 
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:8080/api/users/register",
         {
           username,
@@ -22,54 +25,101 @@ function Register() {
 
       alert("Registration Successful");
 
-      console.log(response.data);
+      navigate("/login");
 
     } catch (error) {
 
-      alert("Registration Failed");
       console.log(error);
+      alert("Registration Failed");
 
     }
+
   };
 
   return (
-    <div className="container">
 
-      <h1>AniMaxx Register</h1>
+    <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-purple-900 flex items-center justify-center">
 
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
+      <div className="w-full max-w-3xl">
 
-      <br /><br />
+        <div className="backdrop-blur-xl bg-white/5 border border-purple-500/30 rounded-3xl p-16">
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+          <div className="text-center mb-8">
 
-      <br /><br />
+            <h1 className="text-8xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+              AniMaxx
+            </h1>
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+            <p className="text-xl text-gray-300 mt-4">
+              Create Your Account
+            </p>
 
-      <br /><br />
+          </div>
 
-      <button onClick={registerUser}>
-        Register
-      </button>
+          <div className="space-y-4">
+
+            <input
+              type="text"
+              placeholder="Enter Username"
+              className="input input-bordered input-lg w-full bg-white/10 text-lg"
+              value={username}
+              onChange={(e) =>
+                setUsername(e.target.value)
+              }
+            />
+
+            <input
+              type="email"
+              placeholder="Enter Email"
+              className="input input-bordered input-lg w-full bg-white/10 text-lg"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
+            />
+
+            <input
+              type="password"
+              placeholder="Enter Password"
+              className="input input-bordered input-lg w-full bg-white/10 text-lg"
+              value={password}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
+            />
+
+            <button
+              className="btn btn-primary w-full h-16 text-xl mt-4"
+              onClick={registerUser}
+            >
+              🚀 Register
+            </button>
+
+          </div>
+
+          <div className="text-center mt-6">
+
+            <p className="text-lg text-gray-300">
+              Already have an account?
+            </p>
+
+            <button
+              className="btn btn-link text-xl text-purple-400"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
+
   );
+
 }
 
 export default Register;

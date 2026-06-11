@@ -13,13 +13,19 @@ function Profile() {
   useEffect(() => {
 
     const email = localStorage.getItem("email");
+    const token = localStorage.getItem("token");
 
     const loadProfile = async () => {
 
       try {
 
         const userResponse = await axios.get(
-          `http://localhost:8080/api/users/email/${email}`
+          `http://localhost:8080/api/users/email/${email}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
 
         setUser(userResponse.data);
@@ -27,11 +33,21 @@ function Profile() {
         const userId = userResponse.data.userId;
 
         const watchlistResponse = await axios.get(
-          "http://localhost:8080/api/watchlist/all"
+          "http://localhost:8080/api/watchlist/all",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
 
         const animeResponse = await axios.get(
-          "http://localhost:8080/api/anime/all"
+          "http://localhost:8080/api/anime/all",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
 
         const userWatchlist = watchlistResponse.data.filter(
@@ -68,6 +84,7 @@ function Profile() {
 
     localStorage.removeItem("token");
     localStorage.removeItem("email");
+    localStorage.removeItem("role");
 
     navigate("/login");
 
@@ -75,54 +92,83 @@ function Profile() {
 
   if (!user) {
 
-    return <h1>Loading...</h1>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
 
   }
 
   return (
 
-    <div className="anime-container">
+    <div className="min-h-screen bg-base-200 p-8">
 
-      <h1>My Profile</h1>
+      <div className="max-w-3xl mx-auto">
 
-      <div className="details-card">
+        <div className="card bg-base-100 shadow-2xl">
 
-        <div className="details-content">
+          <div className="card-body">
 
-          <h2>{user.username}</h2>
+            <h1 className="text-4xl font-bold text-center mb-6">
+              My Profile
+            </h1>
 
-          <p>
-            <strong>Email:</strong> {user.email}
-          </p>
+            <h2 className="text-2xl font-bold">
+              {user.username}
+            </h2>
 
-          <p>
-            <strong>Role:</strong> {user.role}
-          </p>
-
-          <p>
-            <strong>User ID:</strong> {user.userId}
-          </p>
-
-          <p>
-            <strong>Watchlist Count:</strong> {watchlistCount}
-          </p>
-
-          <h3>Recent Watchlist</h3>
-
-          {watchlistAnime.map((anime, index) => (
-
-            <p key={index}>
-              ⭐ {anime}
+            <p>
+              <strong>Email:</strong> {user.email}
             </p>
 
-          ))}
+            <p>
+              <strong>Role:</strong> {user.role}
+            </p>
 
-          <button
-            className="watchlist-btn"
-            onClick={logout}
-          >
-            Logout
-          </button>
+            <p>
+              <strong>User ID:</strong> {user.userId}
+            </p>
+
+            <p>
+              <strong>Watchlist Count:</strong> {watchlistCount}
+            </p>
+
+            <div className="divider"></div>
+
+            <h3 className="text-xl font-bold">
+              Recent Watchlist
+            </h3>
+
+            {watchlistAnime.length > 0 ? (
+              watchlistAnime.map((anime, index) => (
+                <p key={index}>
+                  ⭐ {anime}
+                </p>
+              ))
+            ) : (
+              <p>No anime in watchlist</p>
+            )}
+
+            <div className="card-actions justify-end mt-6">
+
+              <button
+                className="btn btn-primary"
+                onClick={() => navigate("/")}
+              >
+                Home
+              </button>
+
+              <button
+                className="btn btn-error"
+                onClick={logout}
+              >
+                Logout
+              </button>
+
+            </div>
+
+          </div>
 
         </div>
 

@@ -15,6 +15,8 @@ public class Anime {
     private Double rating;
     private Integer releaseYear;
     private String imageUrl;
+    private String description;
+    private String trailerUrl;
 
     public Anime() {
     }
@@ -65,5 +67,21 @@ public class Anime {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTrailerUrl() {
+        return trailerUrl;
+    }
+
+    public void setTrailerUrl(String trailerUrl) {
+        this.trailerUrl = trailerUrl;
     }
 }
