@@ -20,7 +20,7 @@ function Profile() {
       try {
 
         const userResponse = await axios.get(
-          `http://localhost:8080/api/users/email/${email}`,
+          `https://animaxx-backend.onrender.com/api/users/email/${email}`,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -33,7 +33,7 @@ function Profile() {
         const userId = userResponse.data.userId;
 
         const watchlistResponse = await axios.get(
-          "http://localhost:8080/api/watchlist/all",
+          "https://animaxx-backend.onrender.com/api/watchlist/all",
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -42,7 +42,7 @@ function Profile() {
         );
 
         const animeResponse = await axios.get(
-          "http://localhost:8080/api/anime/all",
+          "https://animaxx-backend.onrender.com/api/anime/all",
           {
             headers: {
               Authorization: `Bearer ${token}`

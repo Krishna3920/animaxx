@@ -14,7 +14,7 @@ function Watchlist() {
     const token = localStorage.getItem("token");
 
     axios.get(
-      "http://localhost:8080/api/watchlist/all",
+      "https://animaxx-backend.onrender.com/api/watchlist/all",
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -30,7 +30,7 @@ function Watchlist() {
     });
 
     axios.get(
-      "http://localhost:8080/api/anime/all",
+      "https://animaxx-backend.onrender.com/api/anime/all",
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -52,7 +52,7 @@ function Watchlist() {
     try {
 
       await axios.delete(
-        `http://localhost:8080/api/watchlist/delete/${id}`,
+        `https://animaxx-backend.onrender.com/api/watchlist/delete/${id}`,
         {
           headers: {
             Authorization:

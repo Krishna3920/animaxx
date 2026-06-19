@@ -22,7 +22,7 @@ function AdminPanel() {
   const loadAnime = () => {
 
     axios.get(
-      "http://localhost:8080/api/anime/all",
+      "https://animaxx-backend.onrender.com/api/anime/all",
       {
         headers: {
           Authorization:
@@ -41,7 +41,7 @@ function AdminPanel() {
     try {
 
       await axios.post(
-        "http://localhost:8080/api/anime/add",
+        "https://animaxx-backend.onrender.com/api/anime/add",
         anime,
         {
           headers: {
@@ -68,7 +68,7 @@ function AdminPanel() {
     try {
 
       await axios.delete(
-        `http://localhost:8080/api/anime/delete/${id}`,
+        `https://animaxx-backend.onrender.com/api/anime/delete/${id}`,
         {
           headers: {
             Authorization:
@@ -91,7 +91,7 @@ function AdminPanel() {
   try {
 
     await axios.put(
-      `http://localhost:8080/api/anime/update/${editingId}`,
+      `https://animaxx-backend.onrender.com/api/anime/update/${editingId}`,
       anime,
       {
         headers: {

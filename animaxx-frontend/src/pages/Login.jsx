@@ -13,7 +13,7 @@ function Login() {
     try {
 
       const response = await axios.post(
-        "http://localhost:8080/api/users/login",
+        "https://animaxx-backend.onrender.com/api/users/login",
         {
           email,
           password
@@ -43,7 +43,7 @@ function Login() {
       try {
 
         const userResponse = await axios.get(
-          `http://localhost:8080/api/users/email/${email}`,
+          `https://animaxx-backend.onrender.com/api/users/email/${email}`,
           {
             headers: {
               Authorization:

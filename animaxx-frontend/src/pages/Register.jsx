@@ -15,7 +15,7 @@ function Register() {
     try {
 
       await axios.post(
-        "http://localhost:8080/api/users/register",
+        "https://animaxx-backend.onrender.com/api/users/register",
         {
           username,
           email,

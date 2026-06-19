@@ -13,7 +13,7 @@ function AnimeDetails() {
   useEffect(() => {
 
     axios.get(
-      "http://localhost:8080/api/anime/all",
+      "https://animaxx-backend.onrender.com/api/anime/all",
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -43,7 +43,7 @@ function AnimeDetails() {
       const email = localStorage.getItem("email");
 
       const userResponse = await axios.get(
-        `http://localhost:8080/api/users/email/${email}`,
+        `https://animaxx-backend.onrender.com/api/users/email/${email}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -54,7 +54,7 @@ function AnimeDetails() {
       const userId = userResponse.data.userId;
 
       await axios.post(
-        "http://localhost:8080/api/watchlist/add",
+        "https://animaxx-backend.onrender.com/api/watchlist/add",
         {
           userId,
           animeId: anime.animeId
@@ -162,7 +162,7 @@ function AnimeDetails() {
 
             <video
               key={anime.animeId}
-              src={`http://localhost:8080/trailers/${anime.trailerUrl}`}
+              src={`https://animaxx-backend.onrender.com/trailers/${anime.trailerUrl}`}
               controls
               className="w-full rounded-xl shadow-xl"
             />

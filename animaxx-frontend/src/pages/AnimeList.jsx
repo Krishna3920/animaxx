@@ -14,7 +14,7 @@ function AnimeList() {
   useEffect(() => {
 
     axios.get(
-      "http://localhost:8080/api/anime/all",
+      "https://animaxx-backend.onrender.com/api/anime/all",
       {
         headers: {
           Authorization:
@@ -39,7 +39,7 @@ function AnimeList() {
         localStorage.getItem("email");
 
       const userResponse = await axios.get(
-        `http://localhost:8080/api/users/email/${email}`,
+        `https://animaxx-backend.onrender.com/api/users/email/${email}`,
         {
           headers: {
             Authorization:
@@ -52,7 +52,7 @@ function AnimeList() {
         userResponse.data.userId;
 
       await axios.post(
-        "http://localhost:8080/api/watchlist/add",
+        "https://animaxx-backend.onrender.com/api/watchlist/add",
         {
           userId,
           animeId
