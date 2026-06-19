@@ -14,6 +14,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import org.springframework.http.HttpMethod;
+
 import java.util.List;
 
 @Configuration
@@ -32,20 +34,24 @@ public class SecurityConfig {
 
                                 .authorizeHttpRequests(auth -> auth
 
+                                                // Allow preflight CORS requests
+                                                .requestMatchers(HttpMethod.OPTIONS, "/**")
+                                                .permitAll()
+
+                                                // Public endpoints
                                                 .requestMatchers(
                                                                 "/",
                                                                 "/api/users/login",
                                                                 "/api/users/register",
                                                                 "/api/users/email/**",
-
                                                                 "/api/anime/**",
-
                                                                 "/api/watchlist/**",
-
                                                                 "/trailers/**")
                                                 .permitAll()
 
-                                                .anyRequest().authenticated())
+                                                // Everything else requires JWT
+                                                .anyRequest()
+                                                .authenticated())
 
                                 .addFilterBefore(
                                                 jwtFilter,
@@ -61,23 +67,25 @@ public class SecurityConfig {
 
                 CorsConfiguration configuration = new CorsConfiguration();
 
-                configuration.setAllowedOrigins(
-                                List.of("http://localhost:5173",
-                                                "https://YOUR-VERCEL-URL.vercel.app"));
+                // Allow localhost and all Vercel deployments
+                configuration.setAllowedOriginPatterns(List.of(
+                                "http://localhost:5173",
+                                "https://*.vercel.app"));
 
-                configuration.setAllowedMethods(
-                                List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                configuration.setAllowedMethods(List.of(
+                                "GET",
+                                "POST",
+                                "PUT",
+                                "DELETE",
+                                "OPTIONS"));
 
-                configuration.setAllowedHeaders(
-                                List.of("*"));
+                configuration.setAllowedHeaders(List.of("*"));
 
                 configuration.setAllowCredentials(true);
 
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-                source.registerCorsConfiguration(
-                                "/**",
-                                configuration);
+                source.registerCorsConfiguration("/**", configuration);
 
                 return source;
         }
